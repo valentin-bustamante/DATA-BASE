@@ -138,9 +138,9 @@ INSERT INTO asiento (id_aula, numero_asiento, fila) VALUES
 (2, 2, 1);
 
 -- 5. ESTUDIANTE
-INSERT INTO estudiante (legajo, num_doc, tipo_doc) VALUES
-(1001, '87654321', 'DNI'),
-(1002, '98765432', 'DNI');
+INSERT INTO estudiante (num_doc, tipo_doc,legajo) VALUES
+('87654321', 'DNI',1001),
+('98765432', 'DNI',1002);
 
 -- 6. (Estudiantes deben existir en PERSONA también)
 INSERT INTO persona (num_doc, tipo_doc, nombre, apellido, fecha_nac, telefono, correo) VALUES
@@ -171,3 +171,14 @@ INSERT INTO preferencia (legajo, nombre_tema, motivo) VALUES
 INSERT INTO inscripcion (numero_inscripcion, legajo, id_curso, id_aula, numero_asiento, fecha, calificacion) VALUES
 (1, 1001, 101, 1, 1, '2024-05-01', 'APROBADO'),
 (2, 1002, 102, 2, 1, '2024-05-02', 'AUSENTE');
+
+
+
+-- Este DELETE elimina a Carlos Ruiz (persona y estudiante)
+DELETE FROM persona
+WHERE num_doc = '87654321' AND tipo_doc = 'DNI';
+
+
+-- Este DELETE va a FALLAR porque el docente está usando RESTRICT // no falla revisar
+DELETE FROM persona
+WHERE num_doc = '12345678' AND tipo_doc = 'DNI';
