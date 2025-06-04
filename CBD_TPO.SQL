@@ -115,70 +115,67 @@ CREATE TABLE inscripcion(
         ON DELETE RESTRICT
 );
 
+--inserts
+
 -- 1. PERSONA
 INSERT INTO persona (num_doc, tipo_doc, nombre, apellido, fecha_nac, telefono, correo) VALUES
-('12345678', 'DNI', 'Ana', 'González', '2000-05-10', '2994000001', 'ana@email.com'),
-('23456789', 'DNI', 'Luis', 'Pérez', '1998-08-25', '2994000002', 'luis@email.com');
+('55555555', 'DNI', 'Julieta', 'Fernández', '2001-04-12', '2995000001', 'julieta@email.com'),
+('66666666', 'DNI', 'Tomás', 'Villalba', '1999-10-22', '2995000002', 'tomas@email.com'),
+('77777777', 'DNI', 'Martina', 'Ríos', '2003-07-30', '2995000003', 'martina@email.com'),
+('88888888', 'DNI', 'Mateo', 'Silva', '2000-12-08', '2995000004', 'mateo@email.com');
 
--- 2. DOCENTE
-INSERT INTO docente (num_doc, tipo_doc, titulo) VALUES
-('12345678', 'DNI', 'Lic. en Informática'),
-('23456789', 'DNI', 'Ing. en Sistemas');
+-- 2. ESTUDIANTE
+INSERT INTO estudiante (legajo, num_doc, tipo_doc) VALUES
+(2001, '77777777', 'DNI'),
+(2002, '88888888', 'DNI');
 
--- 3. AULA
-INSERT INTO aula (id_aula, tipo, cant_asientos) VALUES
-(1, 'Aula tradicional', 30),
-(2, 'Laboratorio', 25);
+-- 3. DOCENTE
+INSERT INTO docente (titulo, num_doc, tipo_doc) VALUES
+('Tec. en Informática', '55555555', 'DNI'),
+('Lic. en Ciencias de Datos', '66666666', 'DNI');
 
--- 4. ASIENTO
-INSERT INTO asiento (id_aula, numero_asiento, fila) VALUES
-(1, 1, 1),
-(1, 2, 1),
-(2, 1, 1),
-(2, 2, 1);
-
--- 5. ESTUDIANTE
-INSERT INTO estudiante (num_doc, tipo_doc,legajo) VALUES
-('87654321', 'DNI',1001),
-('98765432', 'DNI',1002);
-
--- 6. (Estudiantes deben existir en PERSONA también)
-INSERT INTO persona (num_doc, tipo_doc, nombre, apellido, fecha_nac, telefono, correo) VALUES
-('87654321', 'DNI', 'Carlos', 'Ruiz', '2002-03-15', '2994000003', 'carlos@email.com'),
-('98765432', 'DNI', 'Sofía', 'Martínez', '2001-11-30', '2994000004', 'sofia@email.com');
-
--- 7. TEMA
+-- 4. TEMA
 INSERT INTO tema (nombre_tema, contenido) VALUES
-('Base de Datos', 'Conceptos de modelo relacional y SQL'),
-('Programación', 'Introducción a la lógica y estructuras de control');
+('Redes', 'Protocolos, capas OSI y modelos de comunicación'),
+('Ingeniería de Software', 'Metodologías ágiles y documentación');
 
--- 8. CURSO
-INSERT INTO curso (id_curso, fecha, hora, id_aula, num_doc, tipo_doc) VALUES
-(101, '2024-06-10', '14:00:00', 1, '12345678', 'DNI'),
-(102, '2024-06-11', '16:00:00', 2, '23456789', 'DNI');
+-- 5. AULA
+INSERT INTO aula (tipo, cant_asientos) VALUES
+('Auditorio', 40),
+('Sala multimedia', 20);
 
--- 9. TIENE
-INSERT INTO tiene (id_curso, nombre_tema, tipo_tema, cantidad_preferencias) VALUES
-(101, 'Base de Datos', 'principal', 15),
-(102, 'Programación', 'principal', 12);
+-- 6.
+INSERT INTO asiento (id_aula, numero_asiento, fila) VALUES
+(3, 1, 1),
+(3, 2, 1),
+(4, 1, 1),
+(4, 2, 1);
 
--- 10. PREFERENCIA
-INSERT INTO preferencia (legajo, nombre_tema, motivo) VALUES
-(1001, 'Base de Datos', 'Me interesa aprender SQL'),
-(1002, 'Programación', 'Me gusta desarrollar programas');
+-- 7. CURSO
+INSERT INTO curso (fecha, hora, id_aula, num_doc, tipo_doc) VALUES
+('2024-07-01', '09:00:00', 3, '55555555', 'DNI'),
+('2024-07-02', '11:00:00', 4, '66666666', 'DNI');
 
--- 11. INSCRIPCION
-INSERT INTO inscripcion (numero_inscripcion, legajo, id_curso, id_aula, numero_asiento, fecha, calificacion) VALUES
-(1, 1001, 101, 1, 1, '2024-05-01', 'APROBADO'),
-(2, 1002, 102, 2, 1, '2024-05-02', 'AUSENTE');
+-- 8. TIENE
+INSERT INTO tiene (tipo_tema, cantidad_preferencias, id_curso, nombre_tema) VALUES
+('principal', 6, 103, 'Redes'),
+('principal', 10, 104, 'Ingeniería de Software');
 
+-- 9. PREFERENCIA
+INSERT INTO preferencia (motivo, nombre_tema, num_doc, tipo_doc) VALUES
+('Me interesa la configuración de redes locales', 'Redes', '77777777', 'DNI'),
+('Quiero trabajar en desarrollo de proyectos', 'Ingeniería de Software', '88888888', 'DNI');
 
+-- 10. INSCRIPCION
+INSERT INTO inscripcion (num_doc, tipo_doc, id_curso, id_aula, numero_asiento, numero_inscripcion, fecha, calificacion) VALUES
+('77777777', 'DNI', 103, 3, 1, 3, '2024-06-01', 'APROBADO'),
+('88888888', 'DNI', 104, 4, 1, 4, '2024-06-02', 'DESAPROBADO');
 
--- Este DELETE elimina a Carlos Ruiz (persona y estudiante)
-DELETE FROM persona
-WHERE num_doc = '87654321' AND tipo_doc = 'DNI';
+--deletes
 
+--DELETE CASCADE
+DELETE FROM estudiante
+WHERE num_doc = '77777777' AND tipo_doc = 'DNI';
 
--- Este DELETE va a FALLAR porque el docente está usando RESTRICT // no falla revisar
-DELETE FROM persona
-WHERE num_doc = '12345678' AND tipo_doc = 'DNI';
+--DELETE RESTRICT
+DELETE FROM curso WHERE id_curso = 104;
